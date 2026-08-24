@@ -1,0 +1,29 @@
+\begin{table}[htbp]
+\centering
+\caption{Fights and Anderson--Darling Rejections Across Event-Count Cutoffs, 2024--25 to 2025--26}
+\label{tab:fight_vs_AD_rejection_chi_squared_20242025_20252026}
+\small
+\renewcommand{\arraystretch}{1.12}
+\setlength{\tabcolsep}{6pt}
+
+\begin{tabular*}{0.85\textwidth}{@{\extracolsep{\fill}}lccc}
+\toprule
+Sample & Games & $\chi^2$ & $p$-value \\
+\midrule
+$n \geq 0$ & 2,624 & 38.6 & $<0.001$ \\
+$n \geq 10$ & 2,624 & 38.6 & $<0.001$ \\
+$n \geq 20$ & 2,621 & 38.4 & $<0.001$ \\
+$n \geq 30$ & 2,564 & 36.3 & $<0.001$ \\
+$n \geq 40$ & 2,038 & 27.1 & $<0.001$ \\
+$n \geq 50$ & 1,015 & 11.3 & $0.010$ \\
+$n \geq 60$ & 303 & 6.5 & $0.091$ \\
+$n \geq 70$ & 74 & 1.7 & $0.637$ \\
+\bottomrule
+\end{tabular*}
+
+\vspace{0.4em}
+\parbox{0.85\textwidth}{
+\footnotesize
+\textit{Note:} Each row reports a Pearson chi-squared test of independence between the number of fights in a game (0, 1, 2, 3+) and whether the Anderson--Darling test rejects exponentiality of that game's interarrival times at the 0.05 level, for games during the 2024--25 through 2025--26 regular seasons with at least the indicated number of violent contact events. All tests have 3 degrees of freedom. 
+}
+\end{table}

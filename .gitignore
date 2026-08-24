@@ -1,0 +1,28 @@
+# R and RStudio
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+
+# Operating-system metadata
+.DS_Store
+Thumbs.db
+
+# Reproducible raw and cleaned downloads
+data/
+
+# Reproducible intermediate/model datasets
+generated/IAT_data/*
+!generated/IAT_data/.gitkeep
+generated/fights/*
+!generated/fights/.gitkeep
+
+# Optional mass game-level and legacy plot archives
+plots/VIOLENT_CONTACT/*
+!plots/VIOLENT_CONTACT/paper/
+!plots/VIOLENT_CONTACT/paper/**
+plots/SHOT/
+plots/HIT/
+plots/old_plots/
+plots/team_logos/
+

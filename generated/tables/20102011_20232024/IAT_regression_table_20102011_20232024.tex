@@ -1,0 +1,47 @@
+\begin{table}[!h]
+\centering
+\caption{Coefficient estimates from exponential model of interarrival times in one-fight games, 2010--11 to 2023--24}
+\label{tab:iat_regression_20102011_20232024}
+\scriptsize
+\renewcommand{\arraystretch}{1.12}
+\setlength{\tabcolsep}{5pt}
+
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lcccc}
+\toprule
+ & (1) & (2) & (3) & (4) \\
+\midrule
+Intercept & $-4.0754^{***}$ & $-4.0987^{***}$ & $-4.0979^{***}$ &  \\
+ & $(0.0057)$ & $(0.0141)$ & $(0.0200)$ &  \\
+Post-fight & $-0.0257^{**}$ & $-0.0284^{***}$ & $-0.0403^{**}$ & $-0.0483^{***}$ \\
+ & $(0.0085)$ & $(0.0085)$ & $(0.0124)$ & $(0.0116)$ \\
+Period 2 & $-0.1367^{***}$ & $-0.1357^{***}$ & $-0.1341^{***}$ & $-0.1341^{***}$ \\
+ & $(0.0065)$ & $(0.0065)$ & $(0.0066)$ & $(0.0063)$ \\
+Period 3 & $-0.3355^{***}$ & $-0.3337^{***}$ & $-0.3292^{***}$ & $-0.3290^{***}$ \\
+ & $(0.0083)$ & $(0.0083)$ & $(0.0084)$ & $(0.0080)$ \\
+Intradivision game &  & $0.0154$ & $0.0159$ &  \\
+ &  & $(0.0096)$ & $(0.0097)$ &  \\
+One-goal margin at fight &  &  & $-0.0070$ &  \\
+ &  &  & $(0.0144)$ &  \\
+Two-goal margin at fight &  &  & $-0.0409^{*}$ &  \\
+ &  &  & $(0.0171)$ &  \\
+Three-or-more-goal margin at fight &  &  & $-0.0092$ &  \\
+ &  &  & $(0.0167)$ &  \\
+Post-fight $\times$ one-goal margin &  &  & $0.0158$ & $0.0251$ \\
+ &  &  & $(0.0152)$ & $(0.0142)$ \\
+Post-fight $\times$ two-goal margin &  &  & $0.0262$ & $0.0317$ \\
+ &  &  & $(0.0182)$ & $(0.0172)$ \\
+Post-fight $\times$ three-or-more-goal margin &  &  & $-0.0415$ & $-0.0167$ \\
+ &  &  & $(0.0232)$ & $(0.0203)$ \\
+\midrule
+Season fixed effects & No & Yes & Yes & No \\
+Month-of-season fixed effects & No & No & Yes & No \\
+Game fixed effects & No & No & No & Yes \\
+\bottomrule
+\end{tabular*}
+
+\vspace{0.4em}
+\parbox{0.95\textwidth}{
+\footnotesize
+\textit{Note:} entries are coefficient estimates with game-clustered standard errors in parentheses; all models are estimated on 176,695 IATs from 3,275 games; significance codes are $^{***}p<0.001$, $^{**}p<0.01$, $^{*}p<0.05$.
+}
+\end{table}

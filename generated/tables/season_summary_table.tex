@@ -1,0 +1,41 @@
+\begin{table}[htbp]
+\centering
+\caption{NHL games and violent events by season}
+\label{tab:season_summary}
+\small
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{5pt}
+
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrr}
+\toprule
+& & \multicolumn{5}{c}{Violent events per game} \\
+\cmidrule(lr){3-7}
+Season & Games & Mean & Median & Standard deviation & 5th percentile & 95th percentile \\
+\midrule
+2010--11 & 1,230 & 52.1 & 51.0 & 12.6 & 33 & 74 \\
+2011--12 & 1,230 & 51.7 & 51.0 & 12.7 & 31 & 74 \\
+2012--13 & 720 & 53.7 & 52.5 & 13.4 & 34 & 78 \\
+2013--14 & 1,230 & 53.2 & 52.0 & 13.5 & 33 & 78 \\
+2014--15 & 1,230 & 55.8 & 55.0 & 15.3 & 33 & 83 \\
+2015--16 & 1,230 & 52.5 & 51.5 & 13.6 & 31 & 76 \\
+2016--17 & 1,230 & 49.3 & 48.0 & 13.3 & 30 & 72 \\
+2017--18 & 1,271 & 49.0 & 48.0 & 12.0 & 31 & 70 \\
+2018--19 & 1,271 & 50.3 & 49.0 & 13.1 & 31 & 74 \\
+2019--20 & 1,082 & 48.9 & 48.0 & 13.3 & 29 & 73 \\
+2020--21 & 868 & 49.7 & 49.0 & 13.9 & 28 & 73 \\
+2021--22 & 1,312 & 51.6 & 51.0 & 14.2 & 30 & 76 \\
+2022--23 & 1,312 & 51.0 & 50.0 & 13.7 & 31 & 75 \\
+2023--24 & 1,312 & 51.3 & 50.0 & 13.7 & 31 & 76 \\
+2024--25 & 1,312 & 48.3 & 47.0 & 11.7 & 31 & 69 \\
+2025--26 & 1,312 & 46.7 & 46.0 & 8.7 & 34 & 61 \\
+\midrule
+Overall & 19,152 & 50.9 & 50.0 & 13.3 & 31 & 75 \\
+\bottomrule
+\end{tabular*}
+
+\vspace{0.4em}
+\parbox{\textwidth}{
+\footnotesize
+\textit{Note:} Each row summarizes the distribution of violent events per game within a single season. Means, medians, and standard deviations are rounded to the nearest tenth; percentiles are rounded to the nearest whole number.
+}
+\end{table}

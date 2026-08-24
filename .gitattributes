@@ -1,0 +1,3 @@
+# Treat serialized R datasets as binary files.
+*.rds binary
+
