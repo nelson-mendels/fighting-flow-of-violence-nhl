@@ -193,6 +193,6 @@ Each table-producing function prints the corresponding LaTeX `\input{}` path aft
 
 ## Public data and provenance
 
-All analysis data are derived from publicly available NHL play-by-play and schedule information. The data-construction code documents the transformations from the public source to the frozen analysis dataset, including regular-season and regulation-period restrictions, event standardization, fight identification, penalty classification, historical team names, and division membership.
+Play-by-play data were retrieved from publicly available NHL sources using the `nhlscraper` R package. Schedule information was retrieved separately from the NHL’s public schedule API. The data-construction code documents the transformations from these sources to the frozen analysis dataset, including regular-season and regulation-period restrictions, event standardization, fight identification, penalty classification, historical team names, and division membership.
 
-The frozen master dataset is included to make the current results directly reproducible even if upstream public data are later corrected or reorganized.
+The frozen master dataset is included to make the current results directly reproducible even if the upstream NHL data or nhlscraper package behavior is later corrected or reorganized. 
