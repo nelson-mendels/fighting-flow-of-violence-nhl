@@ -32,7 +32,8 @@ game_plot <- function(
     master,
     season,
     event,
-    lambda_hat = TRUE
+    lambda_hat = TRUE,
+    stats_y_step = 0.068
 ) {
   
   if (nrow(master) == 0) {
@@ -77,7 +78,7 @@ game_plot <- function(
   x_text <- x_left + 0.015 * xmax
   
   y_top <- 0.36
-  y_step <- 0.068
+  y_step <- stats_y_step
   y_vals <- c(
     y_top,
     y_top - y_step,

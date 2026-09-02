@@ -62,7 +62,7 @@ Builds an empirical cumulative distribution plot for the interarrival times in o
 
 ### `R/IAT/plots/make_IAT_example_plots.R`
 
-Creates the exponential and non-exponential game examples used in the paper. It selects representative games from a typical event-count range unless IDs are supplied, builds both figures with `game_plot()`, harmonizes their axes, and saves the PNG files under `plots/VIOLENT_CONTACT/paper/`. It also writes `IAT_example_note.tex` from the selected games’ metadata and statistics so the LaTeX note stays synchronized with the figures.
+Creates the exponential and non-exponential game examples used in the paper. It selects representative games from a typical event-count range unless IDs are supplied, builds both figures with `game_plot()`, harmonizes their axes, and saves wide and square PNG versions under `plots/VIOLENT_CONTACT/paper/`. The wide files retain the original names, while the side-by-side alternatives end in `_square`.
 
 ### `R/IAT/plots/game_level_plots.R`
 

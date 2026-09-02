@@ -4,7 +4,8 @@ make_one_fight_timeline_plot <- function(
     game_ids,
     season_ids = NULL,
     panel_labels = NULL,
-    output_path = NULL
+    output_path = NULL,
+    panel_height = 2.75
 ) {
   
   working.dir <- sub("/+$", "", working.dir)
@@ -371,7 +372,7 @@ make_one_fight_timeline_plot <- function(
     filename = output_path,
     plot = combined_plot,
     width = 11,
-    height = 3.25 * length(game_ids),
+    height = panel_height * length(game_ids),
     units = "in",
     dpi = 300,
     device = "png"

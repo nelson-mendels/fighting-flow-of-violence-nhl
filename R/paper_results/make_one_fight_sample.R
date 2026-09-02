@@ -141,9 +141,9 @@ make_one_fight_sample <- function(working.dir, pbp_master_used) {
       "}"
     ),
     paste0("\\label{tab:one_fight_sample_", season_folder_name, "}"),
-    "\\small",
-    "\\renewcommand{\\arraystretch}{1.15}",
-    "\\setlength{\\tabcolsep}{6pt}",
+    "\\scriptsize",
+    "\\renewcommand{\\arraystretch}{1.12}",
+    "\\setlength{\\tabcolsep}{5pt}",
     "",
     "\\begin{tabular*}{0.78\\textwidth}{@{\\extracolsep{\\fill}}lr}",
     "\\toprule",

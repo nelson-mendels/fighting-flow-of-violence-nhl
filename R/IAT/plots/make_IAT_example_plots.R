@@ -1,6 +1,5 @@
-# Creates the two game-level interarrival distribution plots used in the paper.
-# It selects representative exponential and non-exponential games, saves both plots,
-# and generates a corresponding LaTeX figure note.
+# Creates wide and square versions of the two game-level interarrival distribution
+# plots used in the paper.
 
 make_IAT_example_plots <- function(
     working.dir,
@@ -17,7 +16,11 @@ make_IAT_example_plots <- function(
       "generated/IAT_data/IAT_game_level_data.rds"
     ),
     plot_width = 8,
-    plot_height = 3.5,
+    plot_height = 2.5,
+    square_width = 4.5,
+    square_height = 3.8,
+    square_stats_y_step = 0.055,
+    stats_y_step = 0.082,
     overwrite = TRUE
 ) {
   
@@ -27,14 +30,22 @@ make_IAT_example_plots <- function(
   
   path_exp <- file.path(out_dir, "IAT_example_exponential.png")
   path_non_exp <- file.path(out_dir, "IAT_example_non_exponential.png")
-  path_note <- file.path(out_dir, "IAT_example_note.tex")
+  path_exp_square <- file.path(out_dir, "IAT_example_exponential_square.png")
+  path_non_exp_square <- file.path(out_dir, "IAT_example_non_exponential_square.png")
+
+  output_paths <- c(
+    path_exp,
+    path_non_exp,
+    path_exp_square,
+    path_non_exp_square
+  )
   
-  if (!overwrite && file.exists(path_exp) && file.exists(path_non_exp)) {
+  if (!overwrite && all(file.exists(output_paths))) {
     message(
-      "Both IAT example plots already exist — skipping. ",
+      "All four IAT example plots already exist — skipping. ",
       "Set overwrite = TRUE to regenerate."
     )
-    return(invisible(c(path_exp, path_non_exp)))
+    return(invisible(output_paths))
   }
   
   # Identify games with event counts typical of the sample
@@ -221,7 +232,8 @@ make_IAT_example_plots <- function(
     working.dir = working.dir,
     master = exp_data,
     season = as.character(exponential_season),
-    event = "VIOLENT_CONTACT"
+    event = "VIOLENT_CONTACT",
+    stats_y_step = stats_y_step
   )
   
   if (is.null(exp_result)) {
@@ -249,7 +261,8 @@ make_IAT_example_plots <- function(
     working.dir = working.dir,
     master = non_exp_data,
     season = as.character(non_exponential_season),
-    event = "VIOLENT_CONTACT"
+    event = "VIOLENT_CONTACT",
+    stats_y_step = stats_y_step
   )
   
   if (is.null(non_exp_result)) {
@@ -325,10 +338,17 @@ make_IAT_example_plots <- function(
   }
   
   # Reposition the statistics box after changing the x-axis
-  reposition_stats_box <- function(p, new_xmax) {
+  reposition_stats_box <- function(
+      p,
+      new_xmax,
+      box_width_fraction = 0.22,
+      text_y = NULL,
+      box_y_padding = 0.04
+  ) {
     x_right <- new_xmax * 0.98
-    x_left <- x_right - 0.22 * new_xmax
+    x_left <- x_right - box_width_fraction * new_xmax
     x_text <- x_left + 0.015 * new_xmax
+    text_layer <- 0
     
     for (i in seq_along(p$layers)) {
       df <- p$layers[[i]]$data
@@ -347,6 +367,11 @@ make_IAT_example_plots <- function(
       ) {
         p$layers[[i]]$data$xmin <- x_left
         p$layers[[i]]$data$xmax <- x_right
+
+        if (!is.null(text_y)) {
+          p$layers[[i]]$data$ymin <- min(text_y) - box_y_padding
+          p$layers[[i]]$data$ymax <- max(text_y) + box_y_padding
+        }
       }
       
       if (
@@ -354,6 +379,11 @@ make_IAT_example_plots <- function(
         "x" %in% names(df)
       ) {
         p$layers[[i]]$data$x <- x_text
+        text_layer <- text_layer + 1
+
+        if (!is.null(text_y) && text_layer <= length(text_y)) {
+          p$layers[[i]]$data$y <- text_y[text_layer]
+        }
       }
     }
     
@@ -382,7 +412,7 @@ make_IAT_example_plots <- function(
     shared_xmax
   )
   
-  # Save both paper figures
+  # Save the wide paper figures
   ggsave(
     filename = path_exp,
     plot = p_exp,
@@ -425,167 +455,65 @@ make_IAT_example_plots <- function(
     "IAT_example_non_exponential.png"
   )
   
-  # Format AD p-values for the LaTeX figure note
-  fmt_p_tex <- function(p) {
-    if (is.na(p)) {
-      "\\text{ = NA}"
-    } else if (p > 0.99) {
-      "\\approx 1"
-    } else if (p >= 0.01) {
-      paste0("= ", sprintf("%.2f", p))
-    } else {
-      e <- floor(log10(p))
-      m <- p / 10^e
-      
-      paste0(
-        "= ",
-        sprintf("%.1f", m),
-        " \\times 10^{",
-        e,
-        "}"
-      )
-    }
-  }
+  # Adapt the statistics boxes only after saving the wide plots because ggplot
+  # layers share mutable objects between plot copies.
+  square_text_y <- 0.36 - (0:2 * square_stats_y_step)
+
+  p_exp_square <- reposition_stats_box(
+    p_exp,
+    shared_xmax,
+    box_width_fraction = 0.42,
+    text_y = square_text_y
+  )
+
+  p_non_exp_square <- reposition_stats_box(
+    p_non_exp,
+    shared_xmax,
+    box_width_fraction = 0.42,
+    text_y = square_text_y
+  )
+
+  # Save square alternatives for side-by-side placement in the paper
+  ggsave(
+    filename = path_exp_square,
+    plot = p_exp_square,
+    width = square_width,
+    height = square_height,
+    dpi = 300,
+    device = "png"
+  )
   
-  # Retrieve team names and dates for the LaTeX figure note
-  describe_game <- function(pbp, gid, ssn) {
-    rows <- pbp %>%
-      mutate(
-        season = as.character(season),
-        game_id = as.character(game_id)
-      ) %>%
-      filter(
-        season == as.character(ssn),
-        game_id == as.character(gid)
-      )
-    
-    team_cols <- list(
-      c("home_team", "away_team"),
-      c("home_name", "away_name"),
-      c("home_team_name", "away_team_name")
-    )
-    
-    teams <- "[HOME TEAM] vs. [AWAY TEAM]"
-    
-    for (cols in team_cols) {
-      if (
-        all(cols %in% names(rows)) &&
-        nrow(rows) > 0
-      ) {
-        teams <- paste0(
-          rows[[cols[1]]][1],
-          " vs. ",
-          rows[[cols[2]]][1]
-        )
-        break
-      }
-    }
-    
-    date_cols <- c(
-      "game_date",
-      "date",
-      "game_day"
-    )
-    
-    game_date <- "[DATE]"
-    
-    for (col in date_cols) {
-      if (
-        col %in% names(rows) &&
-        nrow(rows) > 0
-      ) {
-        parsed <- suppressWarnings(
-          as.Date(rows[[col]][1])
-        )
-        
-        if (!is.na(parsed)) {
-          game_date <- format(
-            parsed,
-            "%B %e, %Y"
-          )
-          
-          game_date <- gsub(
-            "  ",
-            " ",
-            game_date
-          )
-          
-          break
-        }
-      }
-    }
-    
-    if (
-      grepl("\\[", teams) ||
-      grepl("\\[", game_date)
-    ) {
-      message(
-        "NOTE: could not find team/date columns for game ",
-        gid,
-        " — placeholders written to the figure note. Fill these in ",
-        "or provide the relevant column names."
-      )
-    }
-    
-    paste0(
-      teams,
-      " (",
-      game_date,
-      ")"
+  if (!file.exists(path_exp_square)) {
+    stop(
+      "Square exponential plot did not save. Expected: ",
+      path_exp_square
     )
   }
-  
-  exp_desc <- describe_game(
-    pbp_master,
-    exponential_game_id,
-    exponential_season
-  )
-  
-  non_exp_desc <- describe_game(
-    pbp_master,
-    non_exponential_game_id,
-    non_exponential_season
-  )
-  
-  # Generate the paper figure note from the selected games
-  note_lines <- c(
-    "\\parbox{\\textwidth}{",
-    "\\footnotesize",
-    paste0(
-      "\\textit{Note:} the step functions in black denote empirical ",
-      "distribution functions and dashed red lines are the fitted ",
-      "exponential distribution functions. The upper panel shows ",
-      exp_desc,
-      ", a game consistent with exponential interarrival times ",
-      "($p_{AD} ",
-      fmt_p_tex(exp_info$ad_p_value),
-      "$). The lower panel shows ",
-      non_exp_desc,
-      ", a game inconsistent with exponential interarrival times ",
-      "($p_{AD} ",
-      fmt_p_tex(non_exp_info$ad_p_value),
-      "$). Both games have violent event counts typical of the sample ",
-      "($n = ",
-      exp_info$n,
-      "$ and $n = ",
-      non_exp_info$n,
-      "$, against a sample median of ",
-      round(n_median),
-      " and a 95th percentile of ",
-      round(n_max),
-      ")."
-    ),
-    "}"
-  )
-  
-  writeLines(
-    note_lines,
-    path_note
-  )
   
   message(
     "Saved: plots/VIOLENT_CONTACT/paper/",
-    "IAT_example_note.tex"
+    "IAT_example_exponential_square.png"
+  )
+  
+  ggsave(
+    filename = path_non_exp_square,
+    plot = p_non_exp_square,
+    width = square_width,
+    height = square_height,
+    dpi = 300,
+    device = "png"
+  )
+  
+  if (!file.exists(path_non_exp_square)) {
+    stop(
+      "Square non-exponential plot did not save. Expected: ",
+      path_non_exp_square
+    )
+  }
+  
+  message(
+    "Saved: plots/VIOLENT_CONTACT/paper/",
+    "IAT_example_non_exponential_square.png"
   )
   
   message("\nIn LaTeX, use:")
@@ -597,17 +525,19 @@ make_IAT_example_plots <- function(
     "\\includegraphics[width=0.85\\textwidth]",
     "{plots/VIOLENT_CONTACT/paper/IAT_example_non_exponential.png}"
   )
+  message("\nSquare versions for side-by-side placement:")
   message(
-    "\\input{plots/VIOLENT_CONTACT/paper/IAT_example_note.tex}"
+    "\\includegraphics[width=0.48\\textwidth]",
+    "{plots/VIOLENT_CONTACT/paper/IAT_example_exponential_square.png}"
+  )
+  message(
+    "\\includegraphics[width=0.48\\textwidth]",
+    "{plots/VIOLENT_CONTACT/paper/IAT_example_non_exponential_square.png}"
   )
   
   invisible(
     list(
-      paths = c(
-        path_exp,
-        path_non_exp,
-        path_note
-      ),
+      paths = output_paths,
       exponential = exp_info,
       non_exponential = non_exp_info,
       n_median = n_median,
